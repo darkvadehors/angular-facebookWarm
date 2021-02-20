@@ -1,0 +1,28 @@
+import { Injectable } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class FacebookCheckService {
+
+  constructor(public alertController: AlertController) { }
+
+  async warnFacebookBrowserUserIfNecessary() {
+    if (this.isFacebookBrowser()) {
+      const alert = await this.alertController.create({
+        cssClass: 'my-custom-class',
+        header: 'ATTENTION !!',
+        message: `Vous utilisez actuellement le navigateur Facebook, ce générateur ne fonctionne pas correctement au sein de ce navigateur ! Merci d'ouvrir Chrome sur Android ou bien Safari sur iOS.`,
+        buttons: [ 'OK' ]
+      });
+      await alert.present();
+    }
+  }
+  // see: https://stackoverflow.com/a/32348687/1513045
+  isFacebookBrowser() {
+    const ua = navigator.userAgent || navigator.vendor
+    return ua.includes('FBAN') || ua.includes('FBAV')
+  }
+
+}
